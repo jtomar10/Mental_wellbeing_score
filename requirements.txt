@@ -1,15 +1,7 @@
 fastapi
-<<<<<<< HEAD
 uvicorn[standard]
 joblib
 numpy
 pandas
 scikit-learn==1.7.2
 pydantic
-=======
-uvicorn
-pydantic
-joblib
-pandas
-scikit-learn
->>>>>>> cbea093 (updated js file with deployed link)
