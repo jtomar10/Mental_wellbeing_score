@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1530" />
+  <meta name="description" content="AI-powered student wellbeing assessment using lifestyle and stress indicators." />
+  <title>Student Mental Health Scorer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="page-glow page-glow--one" aria-hidden="true"></div>
+  <div class="page-glow page-glow--two" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#" aria-label="Student Mental Health Scorer home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18" stroke="url(#brandGrad)" stroke-width="2"/>
+            <circle cx="20" cy="8" r="2.6" fill="#5B78F6"/>
+            <circle cx="31" cy="26" r="2.6" fill="#20C7B4"/>
+            <circle cx="9" cy="26" r="2.6" fill="#9688F4"/>
+            <path d="M20 8 L31 26 L9 26 Z" stroke="#C9D3EF" stroke-width="1" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="brandGrad" x1="0" y1="0" x2="40" y2="40">
+                <stop offset="0" stop-color="#5B78F6"/>
+                <stop offset="1" stop-color="#20C7B4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-title">Student Mental Health Scorer</span>
+          <span class="brand-subtitle">AI-assisted wellbeing reflection</span>
+        </span>
+      </a>
+
+      <div class="status-pill status-pill--checking" id="modelStatus" role="status" aria-live="polite">
+        <span class="status-dot"></span>
+        <span id="modelStatusText">Checking model…</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <div class="eyebrow-row">
+            <span class="eyebrow">Student wellbeing • 0–10 model score</span>
+            <span class="hero-chip">~ 1 minute</span>
+          </div>
+
+          <h1 class="hero-heading">
+            Understand your
+            <span>everyday wellbeing.</span>
+          </h1>
+
+          <p class="hero-text">
+            Combine sleep, study, movement, digital habits and self-reported stress into
+            one model-based score you can use as a reflection point — never as a diagnosis.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#assessment" class="btn btn-primary">
+              Start assessment
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+
+            <div class="hero-trust">
+              <span class="trust-icon" aria-hidden="true">✓</span>
+              <span>Private in-browser form • no account required</span>
+            </div>
+          </div>
+
+          <div class="hero-microstats" aria-label="Assessment overview">
+            <div>
+              <strong>12</strong>
+              <span>inputs</span>
+            </div>
+            <div>
+              <strong>5</strong>
+              <span>wellbeing signals</span>
+            </div>
+            <div>
+              <strong>0–10</strong>
+              <span>score scale</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-orb">
+            <div class="hero-orb-grid"></div>
+            <div class="hero-orb-core">
+              <span class="hero-orb-kicker">YOUR</span>
+              <span class="hero-orb-score">0–10</span>
+              <span class="hero-orb-caption">wellbeing estimate</span>
+            </div>
+            <div class="orb-tag orb-tag--sleep">Sleep</div>
+            <div class="orb-tag orb-tag--study">Study</div>
+            <div class="orb-tag orb-tag--move">Movement</div>
+            <div class="orb-tag orb-tag--digital">Digital</div>
+            <div class="orb-tag orb-tag--stress">Stress</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="factor-strip" id="factorStripIntro">
+          <div class="factor-card">
+            <span class="factor-icon icon-sleep" aria-hidden="true"></span>
+            <span class="factor-label">Sleep</span>
+            <span class="factor-desc">Nightly rest</span>
+          </div>
+          <div class="factor-card">
+            <span class="factor-icon icon-study" aria-hidden="true"></span>
+            <span class="factor-label">Study</span>
+            <span class="factor-desc">Focused academic time</span>
+          </div>
+          <div class="factor-card">
+            <span class="factor-icon icon-activity" aria-hidden="true"></span>
+            <span class="factor-label">Movement</span>
+            <span class="factor-desc">Daily activity</span>
+          </div>
+          <div class="factor-card">
+            <span class="factor-icon icon-digital" aria-hidden="true"></span>
+            <span class="factor-label">Digital</span>
+            <span class="factor-desc">Usage + unlocks</span>
+          </div>
+          <div class="factor-card">
+            <span class="factor-icon icon-stress" aria-hidden="true"></span>
+            <span class="factor-label">Stress</span>
+            <span class="factor-desc">Self-reported pressure</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="assessment" id="assessment">
+      <div class="wrap">
+        <form class="card assessment-card" id="assessmentForm" novalidate>
+          <div class="assessment-top">
+            <div>
+              <span class="section-kicker">Assessment</span>
+              <h2>Tell us about your routine</h2>
+              <p>Use your typical day rather than a one-off unusual day.</p>
+            </div>
+
+            <div class="progress-panel" aria-label="Assessment progress">
+              <div class="progress-topline">
+                <span>Completion</span>
+                <strong id="completionText">0%</strong>
+              </div>
+              <div class="progress-track">
+                <span id="completionBar"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-note">
+            <span class="section-note-icon" aria-hidden="true">i</span>
+            <span>Your entries are sent only to your local FastAPI prediction service at <code>127.0.0.1:8000</code>.</span>
+          </div>
+
+          <fieldset class="form-section">
+            <legend>
+              <span class="legend-index">01</span>
+              <span>Personal profile</span>
+            </legend>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="age">Age</label>
+                <div class="input-shell">
+                  <input type="number" id="age" name="age" min="10" max="100" step="1" placeholder="20" inputmode="numeric" required />
+                  <span class="input-suffix">yrs</span>
+                </div>
+                <span class="field-hint">Age 10–100</span>
+                <span class="field-error" data-error-for="age"></span>
+              </div>
+
+              <div class="field">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                  <option value="" disabled selected>Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span class="field-error" data-error-for="gender"></span>
+              </div>
+
+              <div class="field">
+                <label for="country">Country</label>
+                <select id="country" name="countrySelect" required>
+                  <option value="" disabled selected>Select country</option>
+                  <option value="India">India</option>
+                  <option value="USA">USA</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Australia">Australia</option>
+                  <option value="UK">UK</option>
+                  <option value="Germany">Germany</option>
+                  <option value="Turkey">Turkey</option>
+                  <option value="Mexico">Mexico</option>
+                  <option value="France">France</option>
+                  <option value="Spain">Spain</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input type="text" id="countryOther" name="countryOther" placeholder="Enter your country" class="field-conditional" hidden />
+                <span class="field-error" data-error-for="country"></span>
+              </div>
+
+              <div class="field">
+                <label for="academic_level">Academic level</label>
+                <select id="academic_level" name="academic_level" required>
+                  <option value="" disabled selected>Select level</option>
+                  <option value="High School">High School</option>
+                  <option value="Undergraduate">Undergraduate</option>
+                  <option value="Graduate">Graduate</option>
+                </select>
+                <span class="field-error" data-error-for="academic_level"></span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>
+              <span class="legend-index">02</span>
+              <span>Digital habits</span>
+            </legend>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="most_used_platform">Most used platform</label>
+                <select id="most_used_platform" name="most_used_platform" required>
+                  <option value="" disabled selected>Select platform</option>
+                  <option>Instagram</option>
+                  <option>Facebook</option>
+                  <option>LinkedIn</option>
+                  <option>Snapchat</option>
+                  <option>Twitter</option>
+                  <option>YouTube</option>
+                  <option>TikTok</option>
+                  <option>LINE</option>
+                  <option>KakaoTalk</option>
+                  <option>VKontakte</option>
+                  <option>WhatsApp</option>
+                  <option>WeChat</option>
+                </select>
+                <span class="field-error" data-error-for="most_used_platform"></span>
+              </div>
+
+              <div class="field">
+                <label for="purpose_of_use">Primary purpose of use</label>
+                <select id="purpose_of_use" name="purpose_of_use" required>
+                  <option value="" disabled selected>Select purpose</option>
+                  <option>Education</option>
+                  <option>Networking</option>
+                  <option>Entertainment</option>
+                  <option>News</option>
+                </select>
+                <span class="field-error" data-error-for="purpose_of_use"></span>
+              </div>
+
+              <div class="field field-slider">
+                <div class="field-label-row">
+                  <label for="avg_daily_usage_hours">Average daily usage</label>
+                  <output class="slider-value" for="avg_daily_usage_hours">4.0 h</output>
+                </div>
+                <div class="slider-row">
+                  <input type="range" id="avg_daily_usage_hours" name="avg_daily_usage_hours" min="0" max="24" step="0.5" value="4" />
+                </div>
+                <span class="field-hint">Total hours spent on your main digital habits</span>
+                <span class="field-error" data-error-for="avg_daily_usage_hours"></span>
+              </div>
+
+              <div class="field">
+                <label for="daily_unlocks">Daily phone unlocks</label>
+                <div class="input-shell">
+                  <input type="number" id="daily_unlocks" name="daily_unlocks" min="0" max="500" step="1" placeholder="50" inputmode="numeric" required />
+                  <span class="input-suffix">/ day</span>
+                </div>
+                <span class="field-hint">Typical number of phone unlocks</span>
+                <span class="field-error" data-error-for="daily_unlocks"></span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>
+              <span class="legend-index">03</span>
+              <span>Lifestyle rhythm</span>
+            </legend>
+
+            <div class="field-grid">
+              <div class="field field-slider">
+                <div class="field-label-row">
+                  <label for="study_hours">Study hours</label>
+                  <output class="slider-value" for="study_hours">6.0 h</output>
+                </div>
+                <div class="slider-row">
+                  <input type="range" id="study_hours" name="study_hours" min="0" max="24" step="0.5" value="6" />
+                </div>
+                <span class="field-hint">Focused academic time per day</span>
+                <span class="field-error" data-error-for="study_hours"></span>
+              </div>
+
+              <div class="field field-slider">
+                <div class="field-label-row">
+                  <label for="physical_activity_hours">Physical activity</label>
+                  <output class="slider-value" for="physical_activity_hours">1.0 h</output>
+                </div>
+                <div class="slider-row">
+                  <input type="range" id="physical_activity_hours" name="physical_activity_hours" min="0" max="24" step="0.5" value="1" />
+                </div>
+                <span class="field-hint">Movement or exercise per day</span>
+                <span class="field-error" data-error-for="physical_activity_hours"></span>
+              </div>
+
+              <div class="field field-slider field-wide">
+                <div class="field-label-row">
+                  <label for="sleep_hours_per_night">Sleep</label>
+                  <output class="slider-value" for="sleep_hours_per_night">7.0 h</output>
+                </div>
+                <div class="slider-row">
+                  <input type="range" id="sleep_hours_per_night" name="sleep_hours_per_night" min="0" max="24" step="0.5" value="7" />
+                </div>
+                <span class="field-hint">Typical nightly sleep duration</span>
+                <span class="field-error" data-error-for="sleep_hours_per_night"></span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>
+              <span class="legend-index">04</span>
+              <span>Self-reported wellbeing</span>
+            </legend>
+
+            <div class="stress-panel">
+              <div class="stress-copy">
+                <label id="stressLabel">How would you describe your current stress level?</label>
+                <p>Select the option that best represents your usual level of pressure recently.</p>
+              </div>
+
+              <div class="segmented" role="radiogroup" aria-labelledby="stressLabel" id="stressLevelGroup">
+                <button type="button" class="segmented-btn" data-value="Low" aria-checked="false" role="radio">
+                  <span class="seg-dot"></span>
+                  <span>Low</span>
+                </button>
+                <button type="button" class="segmented-btn" data-value="Medium" aria-checked="false" role="radio">
+                  <span class="seg-dot"></span>
+                  <span>Medium</span>
+                </button>
+                <button type="button" class="segmented-btn" data-value="High" aria-checked="false" role="radio">
+                  <span class="seg-dot"></span>
+                  <span>High</span>
+                </button>
+                <button type="button" class="segmented-btn" data-value="Very High" aria-checked="false" role="radio">
+                  <span class="seg-dot"></span>
+                  <span>Very High</span>
+                </button>
+              </div>
+
+              <div class="stress-scale">
+                <span>Lower pressure</span>
+                <span>Higher pressure</span>
+              </div>
+
+              <input type="hidden" id="stress_level" name="stress_level" required />
+              <span class="field-error" data-error-for="stress_level"></span>
+            </div>
+          </fieldset>
+
+          <div class="form-footer">
+            <div class="api-error" id="apiError" hidden role="alert"></div>
+
+            <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+              <span class="btn-label">Generate my wellbeing score</span>
+              <span class="btn-spinner" hidden aria-hidden="true"></span>
+              <svg class="btn-arrow" width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+            <p class="form-footnote">
+              By continuing, you understand this is an academic ML estimate and not a clinical diagnosis.
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="result" id="resultSection" hidden aria-labelledby="resultTitle">
+      <div class="wrap">
+        <div class="result-card card">
+          <div class="result-head">
+            <div>
+              <span class="section-kicker">Assessment complete</span>
+              <h2 id="resultTitle">Your wellbeing snapshot</h2>
+              <p class="result-subhead">A model-based estimate from the information you entered.</p>
+            </div>
+            <button class="result-link" id="editAssessmentBtn" type="button">Edit answers</button>
+          </div>
+
+          <div class="result-hero-grid">
+            <div class="score-panel">
+              <div class="meter-shell" aria-label="Wellbeing score meter from 0 to 10">
+                <div class="meter-visual">
+                  <svg viewBox="0 0 360 210" class="smart-meter" role="img" aria-labelledby="meterTitle meterDesc">
+                    <title id="meterTitle">Wellbeing score meter</title>
+                    <desc id="meterDesc">A 0 to 10 semicircular meter showing the model score.</desc>
+                    <defs>
+                      <linearGradient id="meterGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#DD6B58"/>
+                        <stop offset="50%" stop-color="#D99A3A"/>
+                        <stop offset="100%" stop-color="#14B8A6"/>
+                      </linearGradient>
+                    </defs>
+                    <path class="meter-track" d="M40 175 A140 140 0 0 1 320 175" pathLength="100"/>
+                    <path class="meter-progress" id="meterProgress" d="M40 175 A140 140 0 0 1 320 175" pathLength="100"/>
+                    <g class="meter-ticks" aria-hidden="true">
+                      <line x1="40" y1="175" x2="40" y2="165"/>
+                      <line x1="110" y1="52" x2="115" y2="60"/>
+                      <line x1="180" y1="35" x2="180" y2="45"/>
+                      <line x1="250" y1="52" x2="245" y2="60"/>
+                      <line x1="320" y1="175" x2="320" y2="165"/>
+                    </g>
+                    <g id="meterNeedle" class="meter-needle">
+                      <circle cx="180" cy="175" r="8"></circle>
+                      <path d="M180 175 L180 74" />
+                    </g>
+                    <text x="36" y="198" class="meter-label">0</text>
+                    <text x="180" y="34" text-anchor="middle" class="meter-label">5</text>
+                    <text x="324" y="198" text-anchor="end" class="meter-label">10</text>
+                  </svg>
+
+                  <div class="meter-score">
+                    <span class="score-value" id="scoreValue">0.00</span>
+                    <span class="score-max">/ 10</span>
+                  </div>
+                </div>
+
+                <div class="meter-scale">
+                  <span class="scale-low">Lower range</span>
+                  <span class="scale-mid">Middle range</span>
+                  <span class="scale-high">Higher range</span>
+                </div>
+              </div>
+
+              <div class="score-status-row">
+                <span class="result-badge" id="resultBadge">Model estimate</span>
+                <span class="confidence-note" id="confidenceNote">Model-based score • 0–10</span>
+              </div>
+            </div>
+
+            <aside class="reflection-panel">
+              <div class="reflection-icon" id="reflectionIcon" aria-hidden="true">✦</div>
+              <span class="reflection-kicker">What this means</span>
+              <h3 id="reflectionTitle">Your result is ready.</h3>
+              <p id="resultExplainer">
+                Complete the assessment to receive a model-based estimate.
+              </p>
+
+              <div class="stress-callout" id="stressCallout">
+                <div class="stress-callout-top">
+                  <span class="mini-label">Selected stress</span>
+                  <span class="stress-value" id="selectedStressValue">—</span>
+                </div>
+                <div class="stress-meter">
+                  <span id="selectedStressFill"></span>
+                </div>
+                <p id="stressMessage">Your selected stress level will be reflected here.</p>
+              </div>
+
+              <div class="next-step">
+                <span class="next-step-icon" aria-hidden="true">→</span>
+                <div>
+                  <strong>Reflection prompt</strong>
+                  <p id="nextStepText">Use this score as a starting point for noticing patterns in your routine.</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <div class="result-divider"></div>
+
+          <div class="result-insights">
+            <div class="insights-heading">
+              <div>
+                <span class="section-kicker">Your inputs</span>
+                <h3>Snapshot of your routine</h3>
+              </div>
+              <span class="insights-tip">These are the values sent to the model.</span>
+            </div>
+
+            <div class="factor-strip factor-strip--summary" id="factorStripSummary"></div>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-ghost" id="resetBtn" type="button">
+              Start a new assessment
+            </button>
+            <button class="btn btn-primary" id="copyResultBtn" type="button">
+              Copy result summary
+            </button>
+          </div>
+
+          <div class="result-disclaimer">
+            <span class="result-disclaimer-icon" aria-hidden="true">ⓘ</span>
+            <p>
+              This score is generated by your machine-learning model from the information provided.
+              It is intended for academic/self-reflection use only and should not be used to diagnose,
+              treat, or rule out a mental-health condition.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>Student Mental Health Scorer • Academic ML demonstration</p>
+      <span>Designed for reflection, not diagnosis.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
